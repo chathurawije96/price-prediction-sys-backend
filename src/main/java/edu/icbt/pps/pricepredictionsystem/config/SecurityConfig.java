@@ -43,7 +43,7 @@ public class SecurityConfig {
                 .disable()
                 .authorizeHttpRequests()
                 .requestMatchers(
-                        "/api/auth", "/api/register", "/api/register/**"
+                        "/api/auth", "/api/register", "/api/register/**", "/api/master-data/**"
 
                 )
                 .permitAll()

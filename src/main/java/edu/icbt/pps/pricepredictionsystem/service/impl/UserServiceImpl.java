@@ -76,7 +76,7 @@ public class UserServiceImpl extends GenericServiceImpl<User, Long> implements U
 
 
         log.debug("Registration Email {} OTP : {}", save.getEmail(), otp);
-        emailSender.sendEmail(request.getEmail().trim(),"LAS Verification",getOtpTemplateMessage(otp));
+        emailSender.sendEmail(request.getEmail().trim(),"PPS Verification",getOtpTemplateMessage(otp));
 
         return save;
     }
@@ -103,12 +103,12 @@ public class UserServiceImpl extends GenericServiceImpl<User, Long> implements U
     }
 
     private String getOtpTemplateMessage(String otp) {
-        String message = "Dear Patient,\n";
+        String message = "Dear User,\n";
         message += "Please enter the code in your registration form.\n\n";
         message += "Code: " + otp + "\n";
         message += "Thank you for registering with us.\n\n";
-        message += "LAS Team.\n";
-        message += "www.las.lk";
+        message += "PPS Team.\n";
+        message += "www.pps.lk";
         return message;
     }
 }

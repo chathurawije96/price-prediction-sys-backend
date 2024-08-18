@@ -24,7 +24,6 @@ public class UserFeedback extends EntityBase {
 
   @NotBlank(message = "Message cannot be empty")
   private String message;
-  @NotBlank(message = "Please select your rate..")
   private Integer rate;
   @Length(max = 10,min = 10, message = "Please enter valid mobile number !")
   private String contactNumber;
@@ -33,10 +32,11 @@ public class UserFeedback extends EntityBase {
   private User user;
 
   @Builder
-  public UserFeedback(Long id, Status status, Date createdAt, Date updatedAt, String message, Integer rate, User user) {
+  public UserFeedback(Long id, Status status, Date createdAt, Date updatedAt, String message, Integer rate, String contactNumber, User user) {
     super(id, status, createdAt, updatedAt);
     this.message = message;
     this.rate = rate;
+    this.contactNumber = contactNumber;
     this.user = user;
   }
 }
