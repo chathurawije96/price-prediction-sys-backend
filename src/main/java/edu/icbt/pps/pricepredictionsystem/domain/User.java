@@ -22,7 +22,7 @@ public class User extends EntityBase {
   }
 
   public enum UserType {
-    ADMIN, LAB_OPERATOR, PATIENT
+    ADMIN, CUSTOMER
   }
 
   public enum IdType {

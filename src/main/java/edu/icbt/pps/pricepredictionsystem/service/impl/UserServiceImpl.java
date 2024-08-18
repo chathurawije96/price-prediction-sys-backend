@@ -50,7 +50,7 @@ public class UserServiceImpl extends GenericServiceImpl<User, Long> implements U
     public User register(RegisterRequest request) throws ServiceException {
         String otp = "" + ((int) (Math.random() * 9000) + 1000);
         User user = User.builder()
-                .userType(User.UserType.PATIENT)
+                .userType(User.UserType.CUSTOMER)
                 .identityNo(request.getIdValue())
                 .idType(User.IdType.valueOf(request.getIdType()))
                 .lastLoggedOn(new Date())
