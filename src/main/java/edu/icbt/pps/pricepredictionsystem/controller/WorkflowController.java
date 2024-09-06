@@ -32,4 +32,13 @@ public class WorkflowController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @GetMapping("/feedback")
+    ResponseEntity<?> allFeedback(){
+        try {
+            return ResponseEntity.ok(workflowService.allFeedback());
+        } catch (ServiceException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

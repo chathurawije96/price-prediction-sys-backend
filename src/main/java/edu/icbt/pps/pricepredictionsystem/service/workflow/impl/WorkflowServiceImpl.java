@@ -3,6 +3,7 @@ package edu.icbt.pps.pricepredictionsystem.service.workflow.impl;
 import edu.icbt.pps.pricepredictionsystem.client.ModelRestClient;
 import edu.icbt.pps.pricepredictionsystem.domain.*;
 import edu.icbt.pps.pricepredictionsystem.dto.FeedbackRequest;
+import edu.icbt.pps.pricepredictionsystem.dto.FeedbackResponse;
 import edu.icbt.pps.pricepredictionsystem.dto.PricePredictRequest;
 import edu.icbt.pps.pricepredictionsystem.exception.ServiceException;
 import edu.icbt.pps.pricepredictionsystem.service.*;
@@ -13,10 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class WorkflowServiceImpl implements WorkflowService {
@@ -34,6 +33,7 @@ public class WorkflowServiceImpl implements WorkflowService {
     private UserService userService;
     @Autowired
     private CommonUtil commonUtil;
+    private final SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     @Override
     public String predictPrice(PricePredictRequest pricePredictRequest) throws ServiceException {
@@ -57,16 +57,34 @@ public class WorkflowServiceImpl implements WorkflowService {
 
     @Override
     public String saveFeedback(FeedbackRequest feedbackRequest) throws ServiceException {
-        userFeedbackService.save(UserFeedback.builder()
-                        .createdAt(new Date())
-                        .user(userService.findUserByEmail(commonUtil.getUserName()))
-                        .rate(feedbackRequest.getRate())
-                        .status(EntityBase.Status.ACTIVE)
-                        .updatedAt(new Date())
-                        .message(feedbackRequest.getMessage())
-                        .contactNumber(feedbackRequest.getContactNo())
-                        .build());
-        return "Customer feedback added successfully..";
+        UserFeedback save = userFeedbackService.save(UserFeedback.builder()
+                .createdAt(new Date())
+                .user(userService.findUserByEmail(commonUtil.getUserName()))
+                .rate(feedbackRequest.getRate())
+                .status(EntityBase.Status.ACTIVE)
+                .updatedAt(new Date())
+                .message(feedbackRequest.getMessage())
+                .contactNumber(feedbackRequest.getContactNo())
+                .build());
+        return "Customer feedback added successfully.. " +save.getId();
+    }
+
+    @Override
+    public List<FeedbackResponse> allFeedback() throws ServiceException {
+        return allFeedbacKList(userFeedbackService.findAll());
+    }
+
+    private List<FeedbackResponse> allFeedbacKList(List<UserFeedback> all) {
+        List<FeedbackResponse> feedbackResponses = new ArrayList<>();
+        all.forEach(userFeedback -> {
+            feedbackResponses.add(FeedbackResponse.builder()
+                            .name(userFeedback.getUser().getName())
+                            .dateTime(dateTimeFormatter.format(userFeedback.getCreatedAt()))
+                            .message(userFeedback.getMessage())
+                            .rate(userFeedback.getRate())
+                    .build());
+        });
+        return feedbackResponses;
     }
 
     private void doValidation(Optional<BikeModel> bikeModel, Optional<BikeType> bikeType, Optional<BikeBrand> bikeBrand) throws ServiceException {
